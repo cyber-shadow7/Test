@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Net Worth Chart</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #222;
+        color: white;
+      }
+
+      .container {
+        text-align: center;
+        width: 100%;
+      }
+
+      .chart-container {
+        margin: 20px auto;
+        width: 80%;
+        max-width: 800px;
+        height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Net Worth Chart</h1>
+      <div class="chart-container">
+        <canvas id="netWorthChart"></canvas>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById("netWorthChart").getContext("2d");
+
+        const netWorthData = {
+          apollo800813: [
+            321300374, 307648495, 342430507, 355924278, 372533623, 363020357,
+          ],
+          thecooliguy791: [1483624, 1028020, 882939, 1025384, 1014322, 1069963],
+          Im_Yuno: [
+            4250608513, 4509230500, 4359635916, 4383757995, 4365878203,
+            5440159994,
+          ],
+          Im_Gwimace: [
+            506073516, 315939582, 319002172, 338418178, 335613018, 347915639,
+          ],
+          aura7: [
+            3029459087, 3147400675, 3513437068, 3622651737, 3702994487,
+            3631900261,
+          ],
+          Ramy08: [
+            382282642, 382118434, 395156036, 414522624, 413020009, 395353264,
+          ],
+          EchoFighter310: [
+            715455296, 741353101, 767880957, 797281179, 794034044, 785556461,
+          ],
+          Sidosaurus_Rex: [
+            553946170, 556990994, 550547511, 569986156, 563558099, 564671117,
+          ],
+          DDraco_Toast: [
+            568780988, 460694294, 474114691, 482892238, 483819703, 496658361,
+          ],
+          difficultentrpot: [
+            2422003321, 2459937958, 2477306563, 2628831060, 2679624008,
+            2702209034,
+          ],
+          FARPlNHA: [
+            341147813, 341147813, 341147813, 341147813, 359103747, 320138687,
+          ],
+        };
+
+        const labels = Object.keys(netWorthData);
+        const dataPoints = Object.values(netWorthData);
+        const numDataPoints = dataPoints[0].length;
+
+        const sortedNames = labels.sort((a, b) => {
+          const differencesA = calculateDifferences(netWorthData[a]);
+          const differencesB = calculateDifferences(netWorthData[b]);
+          const lastValueA = differencesA[differencesA.length - 1];
+          const lastValueB = differencesB[differencesB.length - 1];
+          return lastValueB - lastValueA;
+        });
+
+        const datasets = sortedNames.map((name) => {
+          const differences = calculateDifferences(netWorthData[name]);
+
+          const latestDiff = differences[numDataPoints - 1];
+          const formattedLatestDiff = latestDiff.toLocaleString("en-US");
+
+          return {
+            label: `${name} (${
+              latestDiff >= 0 ? "+" : ""
+            }${formattedLatestDiff})`,
+            data: differences,
+            fill: false,
+            borderColor: getRandomColor(),
+            tension: 0.1,
+          };
+        });
+
+        const customLabels = [
+          "12/12",
+          "12/18",
+          "12/21",
+          "12/24",
+          "12/26",
+          "12/31",
+          "1/2",
+        ]; // Replace with your custom labels
+
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: customLabels,
+            datasets: datasets,
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: "white",
+                },
+              },
+              x: {
+                ticks: {
+                  color: "white",
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "right",
+                align: "start",
+                labels: {
+                  color: "white",
+                  usePointStyle: true,
+                },
+              },
+              zoom: {
+                pan: {
+                  enabled: true,
+                  mode: "xy",
+                },
+                zoom: {
+                  wheel: {
+                    enabled: true,
+                  },
+                  pinch: {
+                    enabled: true,
+                  },
+                  mode: "xy",
+                },
+              },
+            },
+          },
+        });
+
+        function getRandomColor() {
+          const letters = "0123456789ABCDEF";
+          let color = "#";
+          for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+
+        function calculateDifferences(data) {
+          const differences = [];
+          const initialValue = data[Object.keys(data)[0]];
+          for (const key in data) {
+            differences.push(data[key] - initialValue);
+          }
+          return differences;
+        }
+      });
+    </script>
+  </body>
+</html>
