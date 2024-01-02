@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>v20</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding-top: 2%;
+        background-color: black;
+        color: #00aaff;
+        margin: 0;
+      }
+
+      h1 {
+        margin-bottom: 2%;
+      }
+
+      .chart-flex-container {
+        display: flex;
+        justify-content: center;
+        margin: 2%;
+      }
+
+      .chart-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 2%;
+      }
+
+      .chart {
+        border: 1px solid #00aaff;
+        padding: 1%;
+        width: 45vw;
+        box-sizing: border-box;
+        background-color: rgba(0, 170, 255, 0.2);
+        color: #00aaff;
+      }
+
+      @media (max-width: 768px) {
+        .chart-flex-container {
+          display: block;
+          width: 95%;
+          margin: 0 auto;
+        }
+
+        .chart-container {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          width: 100%;
+        }
+      }
+      .number-box {
+        flex: 1;
+        border: 1px solid #00aaff;
+        padding: 1%;
+        margin: 1% 1%;
+        background-color: rgba(0, 170, 255, 0.2);
+        color: #00aaff;
+      }
+      .numbers-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap */
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 1%;
+        margin-bottom: 2%;
+      }
+    </style>
+    <style class="input-output">
+      .form-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px; /* Adjust the space between forms */
+      }
+      input[inputmode="numeric"] {
+        color: #00aaff;
+        font-size: 16px;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 50px; /* Rounded edges */
+        border: 2px solid #00aaff;
+        outline: none; /* Remove the default focus outline */
+        background-color: black; /* Set background color to black */
+        position: relative; /* Position the input field */
+      }
+      input[type="text"]:focus,
+      input[type="number"]:focus {
+        border-color: #00aaff; /* Change the border color on focus */
+      }
+
+      /* Styling for the placeholder label */
+      label[placeholder]:before {
+        content: attr(placeholder);
+        color: #00aaff;
+        transition: transform 0.3s ease-in-out, color 0.2s ease-in-out;
+        transform-origin: 15% 100%;
+        display: block;
+        margin-top: -36px;
+        margin-left: 15px;
+        font-size: 14px;
+        pointer-events: none; /* Allow clicking through the label */
+        z-index: 1; /* Place label behind the input */
+        position: absolute; /* Position the label */
+        background-color: black; /* Background color behind the placeholder */
+        padding: 0 6px; /* Add padding for the box-like effect */
+        border-radius: 50px; /* Rounded corners for the box-like effect */
+      }
+
+      /* Adjust the label's appearance on focus */
+      input:focus + label[placeholder]:before,
+      input:valid + label[placeholder]:before {
+        transform: scale(0.9) translateY(-21px);
+        color: orange;
+      }
+
+      /* Hide number input arrows */
+      .number-box::-webkit-inner-spin-button,
+      .number-box::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    </style>
+    <style class="output">
+      .numeric-box {
+        pointer-events: none;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h1>Item Name Here</h1>
+    <div class="numbers-container">
+      <div class="number-box">Instant Buy Price: $100</div>
+      <div class="number-box">Instant Sell Price: $95</div>
+      <div class="number-box">Sell Offer Price: $98</div>
+      <div class="number-box">Buy Order Price: $102</div>
+    </div>
+    <!--seperate css for Calculator and Output-->
+    <div>
+      <h1>Calculator</h1>
+      <!--add toggle for buy order and instant buy-->
+    </div>
+    <!--input section, see if any other inputs-->
+    <div class="form-container">
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          required
+          class="number-box"
+          oninput="formatNumber(this)"
+        />
+        <label placeholder="Quantity Item-1"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          required
+          class="number-box"
+        />
+        <label placeholder="Quantity Item-2"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          required
+          class="number-box"
+        />
+        <label placeholder="Price to Spend"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          required
+          class="number-box"
+        />
+        <label placeholder="Items Needed"></label>
+      </form>
+    </div>
+    <div>
+      <h1>Output</h1>
+    </div>
+    <!--output section, see if any other outputs-->
+    <!--rename classes and remove typing functions-->
+    <!--after that add in JS to do the math-->
+    <div class="form-container">
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          required
+          class="numeric-box"
+          readonly
+        />
+        <label placeholder="Quantity Item-1"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          readonly
+          class="numeric-box"
+        />
+        <label placeholder="Quantity Item-2"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          readonly
+          class="numeric-box"
+        />
+        <label placeholder="Items Crafted"></label>
+      </form>
+      <form>
+        <input
+          type="text"
+          inputmode="numeric"
+          oninput="formatNumber(this)"
+          readonly
+          class="numeric-box"
+        />
+        <label placeholder="Total Price"></label>
+      </form>
+    </div>
+    <!--work on making api-->
+    <!--maybe works with "FireBase"-->
+    <!--then add funcanality-->
+    <div class="chart-flex-container">
+      <div class="chart-container">
+        <div class="chart"><canvas id="chart1"></canvas></div>
+        <div class="chart"><canvas id="chart2"></canvas></div>
+        <div class="chart"><canvas id="chart3"></canvas></div>
+        <div class="chart"><canvas id="chart4"></canvas></div>
+      </div>
+    </div>
+    <script>
+      const data1 = {
+        labels: ["January", "February", "March", "April", "May"],
+        datasets: [
+          {
+            label: "Dataset 1 - Line 1",
+            data: [10, 20, 15, 25, 30],
+            borderColor: "rgba(0, 170, 255, 1)",
+            backgroundColor: "rgba(0, 170, 255, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+          {
+            label: "Dataset 1 - Line 2",
+            data: [5, 10, 8, 15, 20],
+            borderColor: "rgba(255, 138, 11, 1)",
+            backgroundColor: "rgba(255, 138, 11, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+        ],
+      };
+
+      const data2 = {
+        labels: ["January", "February", "March", "April", "May"],
+        datasets: [
+          {
+            label: "Dataset 2 - Line 1",
+            data: [5, 15, 10, 30, 20],
+            borderColor: "rgba(0, 170, 255, 1)",
+            backgroundColor: "rgba(0, 170, 255, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+          {
+            label: "Dataset 2 - Line 2",
+            data: [10, 8, 12, 18, 25],
+            borderColor: "rgba(255, 138, 11, 1)",
+            backgroundColor: "rgba(255, 138, 11, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+        ],
+      };
+
+      const data3 = {
+        labels: ["January", "February", "March", "April", "May"],
+        datasets: [
+          {
+            label: "Dataset 3 - Line 1",
+            data: [5, 15, 10, 30, 20],
+            borderColor: "rgba(0, 170, 255, 1)",
+            backgroundColor: "rgba(0, 170, 255, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+          {
+            label: "Dataset 3 - Line 2",
+            data: [10, 8, 12, 18, 25],
+            borderColor: "rgba(255, 138, 11, 1)",
+            backgroundColor: "rgba(255, 138, 11, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+        ],
+      };
+
+      const data4 = {
+        labels: ["January", "February", "March", "April", "May"],
+        datasets: [
+          {
+            label: "Dataset 4 - Line 1",
+            data: [10, 20, 15, 25, 30],
+            borderColor: "rgba(0, 170, 255, 1)",
+            backgroundColor: "rgba(0, 170, 255, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+          {
+            label: "Dataset 4 - Line 2",
+            data: [5, 10, 8, 15, 20],
+            borderColor: "rgba(255, 138, 11, 1)",
+            backgroundColor: "rgba(255, 138, 11, 0.2)", // Set custom fill color
+            fill: true,
+            pointStyle: "line", // Change point style to rect (no points)
+            borderCapStyle: "round", // Make the line rounded for a smooth appearance
+          },
+        ],
+      };
+      const options = {
+        plugins: {
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            backgroundColor: "rgba(0, 170, 255, 0.8)", // Set tooltip background color
+            titleColor: "black", // Set tooltip title text color
+            bodyColor: "black", // Set tooltip body text color
+            borderColor: "#00aaff", // Set tooltip border color
+            borderWidth: 1,
+          },
+          interaction: {
+            intersect: false,
+          },
+        },
+        scales: {
+          x: {
+            display: true,
+            ticks: {
+              color: "#00aaff", // Set x-axis label color
+            },
+          },
+          y: {
+            display: true,
+            ticks: {
+              color: "#00aaff", // Set y-axis label color
+            },
+          },
+        },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        maintainAspectRatio: true,
+        backgroundColor: "black",
+        color: "#00aaff",
+      };
+
+      window.onload = function () {
+        new Chart(document.getElementById("chart1").getContext("2d"), {
+          type: "line",
+          data: data1,
+          options: options,
+        });
+
+        new Chart(document.getElementById("chart2").getContext("2d"), {
+          type: "line",
+          data: data2,
+          options: options,
+        });
+
+        new Chart(document.getElementById("chart3").getContext("2d"), {
+          type: "line",
+          data: data3,
+          options: options,
+        });
+
+        new Chart(document.getElementById("chart4").getContext("2d"), {
+          type: "line",
+          data: data4,
+          options: options,
+        });
+      };
+      // Disable arrow key functionality in number inputs
+      const numberInputs = document.querySelectorAll(".number-box");
+      numberInputs.forEach((input) => {
+        input.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+            e.preventDefault();
+          }
+        });
+      });
+    </script>
+    <script class="Calculator Formater">
+      function formatNumber(input) {
+        // Remove non-digit characters and format with commas
+        input.value = input.value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    </script>
+  </body>
+</html>
